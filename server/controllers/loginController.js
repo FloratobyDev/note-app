@@ -14,7 +14,8 @@ export const loginController = async (req, res) => {
 
                 const token = jwt.sign({
                     userID: user._id,
-                    username: user.username
+                    username: user.username,
+                    role: user.role
                 }, process.env.SECRET_KEY)
 
                 res.cookie('accessToken', token, {

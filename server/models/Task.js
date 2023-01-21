@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb'
 import * as mongoose from 'mongoose'
 
 const TaskSchema = mongoose.Schema({

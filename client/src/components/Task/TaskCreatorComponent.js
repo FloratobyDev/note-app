@@ -3,9 +3,10 @@ import { AiOutlineClose, AiOutlineCheck } from 'react-icons/ai'
 import useGetQuoteHook from '../../hooks/useGetQuoteHook'
 import { useAddTaskMutation, useFetchTaskQuery, useRemoveTaskMutation, useUpdateTaskMutation } from '../../store/apis/tasksApi'
 import { Dropdown } from '../Generic/Dropdown'
-import { useFetchCategoryQuery } from '../../store'
+import { useFetchCategoryQuery, useLazyFetchCalendarQuery } from '../../store'
 import { nanoid } from '@reduxjs/toolkit'
 
+//We have data for Hannah, Sean
 
 const TaskCreatorComponent = ({ tasks, onSave }) => {
 
@@ -19,7 +20,7 @@ const TaskCreatorComponent = ({ tasks, onSave }) => {
 
     const TASK_INITIAL_VALUE = {
         description: "",
-        category: "Exercise",
+        category: "",
         completed: false
     }
 
@@ -43,7 +44,7 @@ const TaskCreatorComponent = ({ tasks, onSave }) => {
      * @description Handles the creation of task.
      * @param {*} event 
      */
-    
+
     const handleAddTask = event => {
         if (currentTask.description.length > 0) {
             setCurrentTask(TASK_INITIAL_VALUE)
@@ -56,6 +57,8 @@ const TaskCreatorComponent = ({ tasks, onSave }) => {
                 difficulty: difficulty,
                 taskID: nanoid()
             })
+
+            setDifficulty(1)
         }
     }
 
@@ -81,6 +84,7 @@ const TaskCreatorComponent = ({ tasks, onSave }) => {
     }
 
     const handleUpdateTask = (task, renew) => {
+
         updateTask({
             ...task,
             renew: renew

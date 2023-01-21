@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { verifyToken } from "../controllers/HelperFunctions/verifyToken.js";
+import Achievement from "../models/Achievement.js";
 import Category from "../models/Category.js";
 export const categoryRoute = Router()
 
@@ -7,12 +8,18 @@ categoryRoute.post('/create', (req, res) => {
     verifyToken(req, (err, userInfo) => {
         if (err) return res.status(401).json("Not logged in!")
 
-        const category = req.body.category
+        const category = req.body.category.toLowerCase()
+        const newField = "categoricalAchievements." + category
+     
+        Achievement.updateOne({ username: userInfo.username }, {
+            $set: { [newField]: 0 }
+        })
 
         Category.findOneAndUpdate({ username: userInfo.username }, {
-            $push: { categoryList: category.toLowerCase() }
+            $push: { categoryList: category }
         })
             .then(response => {
+
                 return res.status(200).json([...response.categoryList || []])
             })
             .catch(err => {

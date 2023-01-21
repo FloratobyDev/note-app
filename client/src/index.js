@@ -12,6 +12,8 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Task from './pages/Task';
 import Register from './pages/Register';
+import RegisterAdmin from './pages/RegisterAdmin';
+import AchievementInfo from './pages/AchievementInfo';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,14 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register />
+  },
+  {
+    path: '/register/admin',
+    element: <RegisterAdmin />
+  },
+  {
+    path: '/achievement/info',
+    element: <AchievementInfo />
   }
 ])
 

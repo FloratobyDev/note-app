@@ -5,12 +5,11 @@ import jwt from "jsonwebtoken"
 import Category from "../models/Category.js"
 import Achievement from "../models/Achievement.js"
 
-export const registerController = async (req, res) => {
+export const registerAdminController = async (req, res) => {
 
-    const { username, email, password } = req.body
-    console.log('logging query')
-    console.log(req.query)
-    console.log(req.params)
+    const { username, email, adminkey, password } = req.body
+
+    if (adminkey !== process.env.ADMIN_KEY) return res.status(400).json("Wrong admin key")
 
     User.findOne({ $or: [{ username: username }, { email: email }] }, null, null, async (err, user) => {
         if (!user) {
@@ -22,9 +21,9 @@ export const registerController = async (req, res) => {
                 username: username,
                 email: email,
                 password: hashedPassword,
-                role: 'member'
+                role: 'admin'
             }, async (err, user) => {
-                console.log(err)
+
                 if (err) return res.status(400).json("Unable to create user")
 
                 await TaskContainer.create({
@@ -36,20 +35,14 @@ export const registerController = async (req, res) => {
 
                 await Achievement.create({
                     username: username,
+                }).catch((err) => {
+                    return res.status(400).json('unable to create achievement')
                 })
-                    .then(response => {
-                        console.log(response)
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        return res.status(400).json('Unable to create achievements')
-                    })
 
                 await Category.create({
                     username: username
                 }).catch(err => {
-                    console.log(err)
-                    return res.status(400).json('Unable to create category for user')
+                    return res.status(400).json('unable to create category')
                 })
 
                 const token = jwt.sign({

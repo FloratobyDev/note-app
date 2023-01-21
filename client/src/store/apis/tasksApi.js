@@ -37,7 +37,7 @@ const tasksApi = createApi({
             }),
             updateTask: builder.mutation({
                 invalidatesTags: (results, error, task) => {
-                    return ['Task']
+                    return ['Task', 'Calendar']
                 },
                 query: (task) => {
                     return {

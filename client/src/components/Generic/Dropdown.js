@@ -46,7 +46,7 @@ export const Dropdown = ({ category, setCategory, categories }) => {
             {isOpen && <div className='absolute w-full p-2 border-2 rounded-lg bg-white border-black mt-2 cursor-pointer'>
                 <div className="text-black flex gap-x-2">
                     <input onChange={event => {
-                        setNewCategory(event.target.value)
+                        setNewCategory(event.target.value.toLowerCase())
                     }} value={newCategory} className="border-2 border-black w-11/12 px-2 rounded-lg" type="text" placeholder="Add category" />
                     <button onClick={() => {
                         if (newCategory.length > 0) {

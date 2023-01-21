@@ -14,11 +14,9 @@ const Login = () => {
     const [userData, setUserData] = useState(INITIAL_STATE)
     const navigate = useNavigate()
 
-    console.log(userData)
-
+  
     const handleUserData = event => {
         if (validateUserResults.isError) {
-            console.log('calling reset')
             validateUserResults.reset()
         }
         setUserData({

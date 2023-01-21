@@ -9,6 +9,9 @@ import { loginController } from './controllers/loginController.js'
 import { registerController } from './controllers/registerController.js'
 import cookieParser from 'cookie-parser'
 import { categoryRoute } from './routes/categoryRoute.js'
+import { calendarRoute } from './routes/calendarRoute.js'
+import { registerAdminController } from './controllers/registerAdminController.js'
+import { fetchAchievement } from './controllers/achievementsControllers.js'
 
 const app = express()
 
@@ -31,8 +34,7 @@ mongoose.connect(uri)
     })
 
 app.get('/authenticate', (req, res) => {
-    console.log(req.cookies)
-    console.log(req.signedCookies)
+
     const cookies = req.cookies?.accessToken;
 
     if (cookies) {
@@ -45,12 +47,32 @@ app.get('/authenticate', (req, res) => {
         return res.status(401).json("Not logged in")
     }
 })
+app.get('/authenticate/admin', (req, res) => {
 
+    const cookies = req.cookies?.accessToken;
+
+    if (cookies) {
+
+        jwt.verify(cookies, process.env.SECRET_KEY, async (err, user) => {
+            console.log(user)
+            if (!user) return res.status(401).json("Unauthorized")
+            if (user.role !== 'admin') return res.status(401).json("Page for authorized personnel only")
+            return res.status(200).json("Welcome")
+        })
+    }
+    else {
+        return res.status(401).json("Not logged in")
+    }
+})
+
+
+app.get('/achievement', fetchAchievement)
 app.post('/login', loginController)
 app.post('/register', registerController)
+app.post('/register/admin', registerAdminController)
 app.use('/tasks', taskRoute)
 app.use('/category', categoryRoute)
-
+app.use('/calendar', calendarRoute)
 app.listen(process.env.PORT, () => {
     console.log('Connected');
 })

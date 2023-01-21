@@ -11,8 +11,19 @@ const userApi = createApi({
         return {
             addUser: builder.mutation({
                 query: (user) => {
+
                     return {
                         url: "/register",
+                        method: "POST",
+                        body: user,
+
+                    }
+                }
+            }),
+            addAdmin: builder.mutation({
+                query: (user) => {
+                    return {
+                        url: "/register/admin",
                         method: "POST",
                         body: user,
 
@@ -32,5 +43,5 @@ const userApi = createApi({
     }
 })
 
-export const { useValidateUserMutation, useAddUserMutation } = userApi
+export const { useValidateUserMutation, useAddAdminMutation, useAddUserMutation } = userApi
 export { userApi }
